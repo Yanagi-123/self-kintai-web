@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="./../static/main.css">
+  <title>ログイン</title>
+</head>
+
+<body>
+  <div class="panel-background">
+    <div class="panel-body">
+      <h1>セルフ勤怠管理</h1>
+      <h2>ログイン</h2>
+      <form action="login" method="post">
+        <div class="form">
+          <label>ユーザID</label>
+          <input type=text name=user_id>
+        </div>
+        <div class="form">
+          <label>パスワード</label>
+          <input type=password name=password>
+        </div>
+        <br />
+        <br />
+        <div>
+          <input class="submit" type=submit value="ログインする">
+        </div>
+      </form>
+      {% if messages %}
+      <div>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+</body>
+
+</html>
