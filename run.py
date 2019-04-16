@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-
 from flask import Flask, session
 from apps.login.views import login_app
-
 from flask import request, redirect
 
 app = Flask(__name__)

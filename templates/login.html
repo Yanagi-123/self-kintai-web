@@ -3,6 +3,8 @@
 
 <head>
   <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
   <link rel="stylesheet" type="text/css" href="./../static/main.css">
   <title>ログイン</title>
 </head>
@@ -12,19 +14,23 @@
     <div class="panel-body">
       <h1>セルフ勤怠管理</h1>
       <h2>ログイン</h2>
-      <form action="login" method="post">
+      <form action="login" method="post" id="loginApp">
         <div class="form">
           <label>ユーザID</label>
-          <input type=text name=user_id>
+          <input type=text name=user_id v-model="userId" placeholder="ユーザID" v-on:change="validateUserId" />
+          <!-- jinja2 のデリミタと競合するため、vue.js側のデリミタを変更している。 -->
+          [[userIdError]]
         </div>
         <div class="form">
           <label>パスワード</label>
-          <input type=password name=password>
+          <input type=password name=password v-model="password" placeholder="パスワード" v-on:change="validatePassword">
+          <!-- jinja2 のデリミタと競合するため、vue.js側のデリミタを変更している。 -->
+          [[passwordError]]
         </div>
         <br />
         <br />
         <div>
-          <input class="submit" type=submit value="ログインする">
+          <input class="submit" type="submit" value="ログインする">
         </div>
       </form>
       {% if messages %}
@@ -37,6 +43,7 @@
     </div>
   </div>
 
+  <script type="text/javascript" src="./../static/login.js"></script>
 </body>
 
 </html>
