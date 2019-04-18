@@ -29,23 +29,36 @@ def method_post():
     user_id = request.form.get('user_id')
     password = request.form.get('password')
 
+    # ログイン画面に表示するエラー文字列リスト
     errors = []
 
     try:
+        # 画面上にて入力されたユーザIDとパスワードのバリデーション
         if not login_v.validate({"user_id": user_id,
                                  "password": password}):
             raise CustomException
 
-        # DBからハッシュ化されたパスワード文字列を取得。
+        # sqlite3ではセッションの永続化を行えないため、逐一セッションを作成する。
         db_session = DataBaseSession()
 
+        # DBからハッシュ化されたパスワード文字列を取得。
+        # SELECT
+        #   hashed_pass_salt    -- ハッシュ化されたパスワード&ソルト
+        # FROM
+        #   user
+        # WHERE
+        #   user_id     = ?   -- 入力されたユーザID
+        # AND
+        #   delete_flag = '0' -- 削除されていない
         hashed_pass_salt = db_session.query(User.hashed_pass_salt) \
             .filter(User.user_id == user_id) \
             .filter(User.delete_flag == "0") \
             .one() \
             .hashed_pass_salt
+
         db_session.close()
 
+        # ハッシュ化されたパスワード&ソルトと、画面側にて入力されたパスワードを照合
         if not pbkdf2_sha256.verify(password, hashed_pass_salt):
             raise CustomException
 
