@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for, session
 
 from cerberus import Validator
 from passlib.hash import pbkdf2_sha256
@@ -66,6 +66,9 @@ def method_post():
         errors.append("ログインエラー")
     except NoResultFound:
         errors.append("ログインエラー")
-        return False
 
-    return render_template("login.html", messages=errors)
+    if errors:
+        return render_template("login.html", messages=errors)
+
+    session["user_id"] = user_id
+    return redirect(url_for('punch_app.method_get'))

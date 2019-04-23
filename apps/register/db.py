@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, TIMESTAMP
+from sqlalchemy import Column, Integer, String, TIMESTAMP, CHAR
 
 import datetime
 
@@ -21,7 +21,7 @@ class User(Base):
     hashed_pass_salt = Column(String(255), nullable=False)
     created_at = Column(TIMESTAMP, default=datetime.datetime.now)  # 作成日時
     updated_at = Column(TIMESTAMP, default=datetime.datetime.now)
-    delete_flag = Column(Integer, default=0)
+    delete_flag = Column(CHAR(1), server_default="0")
 
 
 # テーブルがDBにない場合テーブルを作成

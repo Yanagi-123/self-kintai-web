@@ -2,6 +2,7 @@
 """WEBアプリ起動"""
 from apps.login.views import login_app
 from apps.register.views import register_app
+from apps.punch.views import punch_app
 
 from flask import Flask, session, request, redirect
 
@@ -26,6 +27,9 @@ def before_request():
 app.register_blueprint(login_app)
 # アカウント登録アプリ
 app.register_blueprint(register_app)
+# 打刻登録アプリ
+app.register_blueprint(punch_app)
 
 if __name__ == "__main__":
+    app.secret_key = 'aaaaaaaaaaaaaaaaaaaaaa'
     app.run(debug=True)
