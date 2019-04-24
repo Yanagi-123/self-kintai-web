@@ -16,10 +16,12 @@
     <div class="panel-body">
       <h1>セルフ勤怠管理</h1>
       <h2>打刻</h2>
-      <div>
-        [[clock]]
-      </div>
       <div id="punchApp">
+        <div>
+          [[clock]]
+        </div>
+        <p hidden id="punchInFlag">{{punchInFlag}}</p>
+
         <button v-on:click="aaa">{{messages}}</button>
       </div>
 

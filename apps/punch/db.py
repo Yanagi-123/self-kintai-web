@@ -18,7 +18,7 @@ class PunchClock(Base):
     __tablename__ = "punch_clock"
 
     user_id = Column(String(20), primary_key=True)  # ユーザID
-    punching_time = Column(TIMESTAMP,  nullable=False)  # 画面側で表示されている時間に合わせるため、サーバ側では値を作らない。
+    punched_time = Column(TIMESTAMP, primary_key=True, nullable=False)  # 画面側で表示されている時間に合わせるため、サーバ側では値を作らない。
     punch_in_flag = Column(CHAR(1), nullable=False)
     created_at = Column(TIMESTAMP, default=datetime.datetime.now)  # 作成日時
     updated_at = Column(TIMESTAMP, default=datetime.datetime.now)
