@@ -5,7 +5,8 @@ from apps.register.views import register_app
 from apps.punch.views import punch_app
 
 from flask import Flask, session, request, redirect
-
+import random
+import string
 app = Flask(__name__)
 
 
@@ -31,5 +32,6 @@ app.register_blueprint(register_app)
 app.register_blueprint(punch_app)
 
 if __name__ == "__main__":
-    app.secret_key = 'aaaaaaaaaaaaaaaaaaaaaa'
+    app.secret_key = ''.join(random.sample(string.printable, k=50))
     app.run(debug=True)
+

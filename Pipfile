@@ -11,6 +11,7 @@ sqlalchemy = "*"
 passlib = "*"
 cerberus = "*"
 pymysql="*"
+flask-sqlalchemy = "*"
 
 [requires]
 python_version = "3.6"

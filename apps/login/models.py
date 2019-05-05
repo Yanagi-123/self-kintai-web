@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, TIMESTAMP, CHAR
+from sqlalchemy import Column, String, TIMESTAMP, CHAR
 
 import datetime
 

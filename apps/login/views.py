@@ -3,9 +3,10 @@ from flask import Blueprint, render_template, request, redirect, url_for, sessio
 from cerberus import Validator
 from passlib.hash import pbkdf2_sha256
 
-from .db import User, DataBaseSession
+from .models import User, DataBaseSession
 from sqlalchemy.orm.exc import NoResultFound
 from utils.Error import CustomException
+
 
 
 login_app = Blueprint("login_app", __name__, template_folder='templates', static_folder='./static')

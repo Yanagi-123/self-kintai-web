@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, session, request, redirect, url_fo
 from sqlalchemy.exc import IntegrityError
 from cerberus import Validator
 from passlib.hash import pbkdf2_sha256
-from .db import User, DataBaseSession
+from .models import User, DataBaseSession
 from utils.Error import CustomException
 
 register_app = Blueprint("register_app", __name__, template_folder='templates', static_folder='./static')

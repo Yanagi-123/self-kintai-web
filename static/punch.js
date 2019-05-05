@@ -3,7 +3,9 @@ var punchApp = new Vue({
   // jinja2のデリミタ {{}} と競合するため、デリミタを変更
   delimiters: ["[[", "]]"],
   data: {
-    clock: ""
+    clock: "0000/00/00 00:00:00",
+    buttonStr: "打刻",
+    status: ""
   },
   mounted: function() {
     setInterval(
@@ -24,6 +26,8 @@ var punchApp = new Vue({
         }), axiosConfig)
         .then(response => {
           console.log(response.data);
+          response.data["punch_in_flag"]
+          this.ccc();
         }).catch(error => {
           console.log(error);
         });
@@ -37,8 +41,21 @@ var punchApp = new Vue({
       let time = date.getSeconds().toString().padStart(2, "0");
       let minutes = date.getMinutes().toString().padStart(2, "0");
       let seconds = date.getSeconds().toString().padStart(2, "0");
-      console.log(year + "/" + month + "/" + day + " " + hour + ":" + minutes + ":" + seconds);
+      //console.log(year + "/" + month + "/" + day + " " + hour + ":" + minutes + ":" + seconds);
       this.clock = year + "/" + month + "/" + day + " " + hour + ":" + minutes + ":" + seconds;
+
+    },
+    ccc: function(punch_in_flag) {
+      // TODO: ボタン表記が切り替わるのはやめ。
+      if (punch_in_flag === 1) {
+        this.buttonStr = "出勤"
+      } else {
+        this.buttonStr = "退勤";
+      }
+    },
+    /* レコードを取得 */
+    ddd: function () {
+
 
     }
   }
