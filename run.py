@@ -3,7 +3,7 @@
 from apps.login.views import login_app
 from apps.register.views import register_app
 from apps.punch.views import punch_app
-
+from apps.attendance.views import attendance_app
 from flask import Flask, session, request, redirect
 import random
 import string
@@ -30,6 +30,8 @@ app.register_blueprint(login_app)
 app.register_blueprint(register_app)
 # 打刻登録アプリ
 app.register_blueprint(punch_app)
+# 打刻修正画面
+app.register_blueprint(attendance_app)
 
 if __name__ == "__main__":
     app.secret_key = ''.join(random.sample(string.printable, k=50))

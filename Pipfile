@@ -12,6 +12,7 @@ passlib = "*"
 cerberus = "*"
 pymysql="*"
 flask-sqlalchemy = "*"
+jinjasql = "*"
 
 [requires]
 python_version = "3.6"

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <title>出勤簿</title>
+</head>
+
+<body>
+  <div id="table">
+
+    <table class="table table-striped">
+
+      <thead>
+        <tr>
+          <th>日付</th>
+          <th>出勤時間</th>
+          <th>退勤時間</th>
+          <th>休憩時間</th>
+          <th>メモ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in items">
+          <td>[[ item.date ]]</td>
+          <td><input type=text v-model="item.punched_in_time"/></td>
+          <td><input type=text v-model="item.punched_out_time"/></td>
+          <td><input type=text v-model="item.break_time"/></td>
+          <td><input type=text v-model="item.note"/></td>
+        </tr>
+        {% for attendance in attendances %}
+        <tr>
+          <!-- 日付 -->
+          <td>{{attendance.date}}</td>
+          <!-- 出勤時間 -->
+          <td><input type="text"/ value="{{attendance.punched_in_time}}"></td>
+          <!-- 退勤時間 -->
+          <td><input type="text"/ value="{{attendance.punched_out_time}}"></td>
+          <!-- 休憩時間 -->
+          <td>{{attendance.note}}</td>
+          <!-- メモ -->
+          <td>{{attendance.date}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button v-on:click="getRecords">[[buttonStr]]</button>
+  </div>
+  <!-- jQuery first, then Tether, then Bootstrap JS. -->
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="./../static/attendance.js"></script>
+</body>
+
+</html>
