@@ -7,7 +7,8 @@ from .models import User, DataBaseSession
 from sqlalchemy.orm.exc import NoResultFound
 from utils.Error import CustomException
 
-
+# TODO; login, logout, registerは全て「auth」ディレクトリを作って統合
+# TODO: フォームデータのバリデーションには、formを用いる　https://github.com/hack4impact/flask-base/blob/master/app/account/forms.py
 
 login_app = Blueprint("login_app", __name__, template_folder='templates', static_folder='./static')
 

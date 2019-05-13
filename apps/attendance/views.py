@@ -5,6 +5,8 @@ from datetime import datetime
 attendance_app = Blueprint("attendance_app", __name__, template_folder='templates', static_folder='./static')
 
 
+# TODO: アプリのメソッド名とかはrestに合わせることにする
+
 @attendance_app.route("/attendance", methods=["GET"])
 def method_get():
     user_id = session.get("user_id")
@@ -69,3 +71,14 @@ def get_attendance():
     attendances = [func(tuple_) for tuple_ in records]
 
     return jsonify(attendances)
+
+
+@attendance_app.route("/attendance/put", methods=["POST"])
+def put_attendance():
+    # TODO: 取得した値の形式チェックを行う
+    user_id = session.get("user_id")
+    items = request.json
+
+    records = UserInput.bbb(user_id, items)
+
+    return "test"

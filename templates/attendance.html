@@ -7,14 +7,34 @@
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="./../static/attendance.css">
   <title>出勤簿</title>
 </head>
 
 <body>
-  <div id="table">
+  <!-- TODO: この部分はjinja2のベースのテンプレートとして、複数ページで継承させる -->
+  <nav class="navbar navbar-light bg-light">
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="navbar-brand" href="/">セルフ勤怠管理</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/punch">打刻</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/attendance">打刻修正</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/logout">ログアウト</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">無効</a>
+      </li>
+    </ul>
+  </nav>
 
+  <div id="table" class="mx-auto">
     <table class="table table-striped">
-
       <thead>
         <tr>
           <th>日付</th>
@@ -26,29 +46,15 @@
       </thead>
       <tbody>
         <tr v-for="(item, index) in items">
-          <td>[[ item.date ]]</td>
-          <td><input type=text v-model="item.punched_in_time"/></td>
-          <td><input type=text v-model="item.punched_out_time"/></td>
-          <td><input type=text v-model="item.break_time"/></td>
-          <td><input type=text v-model="item.note"/></td>
+          <td class="date">[[ item.date ]]</td>
+          <td class="time"><input type=text v-model="item.punched_in_time" class="time" /></td>
+          <td class="time"><input type=text v-model="item.punched_out_time" class="time" /></td>
+          <td class="time"><input type=text v-model="item.break_time" class="time" /></td>
+          <td><textarea name="example" cols="20" rows="2" v-model="item.note"></textarea></td>
         </tr>
-        {% for attendance in attendances %}
-        <tr>
-          <!-- 日付 -->
-          <td>{{attendance.date}}</td>
-          <!-- 出勤時間 -->
-          <td><input type="text"/ value="{{attendance.punched_in_time}}"></td>
-          <!-- 退勤時間 -->
-          <td><input type="text"/ value="{{attendance.punched_out_time}}"></td>
-          <!-- 休憩時間 -->
-          <td>{{attendance.note}}</td>
-          <!-- メモ -->
-          <td>{{attendance.date}}</td>
-        </tr>
-        {% endfor %}
       </tbody>
     </table>
-    <button v-on:click="getRecords">[[buttonStr]]</button>
+    <button v-on:click="putRecords">[[buttonStr]]</button>
   </div>
   <!-- jQuery first, then Tether, then Bootstrap JS. -->
   <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>

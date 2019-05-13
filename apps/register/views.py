@@ -20,6 +20,8 @@ register_validation_schema = {"user_id": {"required": True,
 
 register_v = Validator(register_validation_schema)
 
+# TODO; login, logout, registerは全て「auth」ディレクトリを作って統合
+
 
 @register_app.route("/register", methods=["GET"])
 def method_get():

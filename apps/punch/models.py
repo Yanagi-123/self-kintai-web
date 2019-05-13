@@ -1,20 +1,12 @@
 from sqlalchemy import Column, String, TIMESTAMP, CHAR
 from sqlalchemy import and_
 from datetime import datetime, timedelta
-from db import Base, engine, DBSession
+from db import DBSession, PunchClockBase
 
 
-class PunchClock(Base):
+class PunchClock(PunchClockBase):
     """ユーザ情報"""
-    __tablename__ = "punch_clock"
-
-    user_id = Column(String(20), primary_key=True)  # ユーザID
-    punched_time = Column(TIMESTAMP, primary_key=True, nullable=False)  # 画面側で表示されている時間に合わせるため、サーバ側では値を作らない。
-    # TODO: やっぱり、出勤/退勤の情報はレコードとして持たせない。
-    punch_in_flag = Column(CHAR(1), nullable=False)
-    created_at = Column(TIMESTAMP, default=datetime.now)  # 作成日時
-    updated_at = Column(TIMESTAMP, default=datetime.now)
-    delete_flag = Column(CHAR(1), default="0")
+    pass
 
     @classmethod
     def todays_record_exists(cls, user_id):
@@ -88,6 +80,3 @@ class PunchClock(Base):
 
         return punched_times
 
-
-# テーブルがDBにない場合テーブルを作成
-Base.metadata.create_all(engine)

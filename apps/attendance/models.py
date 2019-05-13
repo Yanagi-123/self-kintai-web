@@ -1,10 +1,17 @@
-from sqlalchemy import Column, String, TIMESTAMP, DATE, INTEGER, text, TEXT
+from sqlalchemy import Column, String, TIMESTAMP, DATE, INTEGER, text, TEXT, CHAR, and_
 from jinjasql import JinjaSql
 
 from datetime import datetime, timedelta, date
 
-from db import Base, engine, DBSession
+from db import Base, engine, DBSession, PunchClockBase
 import calendar
+
+Base.metadata.clear()
+
+
+class PunchClock(PunchClockBase):
+    """ユーザ情報"""
+    pass
 
 
 class UserInput(Base):
@@ -42,6 +49,8 @@ class UserInput(Base):
             FROM
               punch_clock
             WHERE
+              delete_flag != '1'
+            AND
               user_id = {{user_id}}
             GROUP BY
               date_
@@ -96,6 +105,111 @@ class UserInput(Base):
 
         return records
 
+    @classmethod
+    def bbb(cls, user_id, items):
+
+        records = items.get("records")
+        year = items.get("year")
+
+        db_session = DBSession()
+
+        def func_1(date_, punched_in_time, punched_out_time):
+            # TODO: やっぱり、画面に初期表示した時点で、どういう状態だったか？をフロント側で持たせる。
+            # TODO: 元々入力されてたけど、やっぱり空になった場合を考える。
+
+            count = db_session.query(PunchClock) \
+                .filter(PunchClock.user_id == user_id)
+
+            if punched_in_time == "":
+                return
+
+            punched_in_time = datetime.strptime(f"{year}-{date_} {punched_in_time}:00", "%Y-%m-%d %H:%M:%S")
+            # SELECT
+            #   COUNT(*)
+            # FROM
+            #   Punch_Clock
+            # AND
+            #   user_id = 'user_000000'
+            # AND
+            #   punched_time == '2019-05-01 00:00:00.000000'
+            count = db_session.query(PunchClock) \
+                .filter(PunchClock.user_id == user_id) \
+                .filter(PunchClock.punched_time == punched_in_time) \
+                .count()
+
+            if count:
+                result = db_session.query(PunchClock) \
+                    .filter(PunchClock.user_id == user_id) \
+                    .filter(PunchClock.punched_time == punched_in_time) \
+                    .first()
+                result.delete_flag = '0'
+                db_session.commit()
+
+                return
+
+            # UPDATE
+            #   Punch_Clock
+            # SET
+            #   delete_flag = '1'
+            # WHERE
+            #   user_id = ?
+            # AND
+            #   punched_time IN (
+            #     SELECT
+            #       punched_time
+            #     FROM
+            #       Punch_Clock
+            #     WHERE
+            #       delete_flag != '1'
+            #     AND
+            #       -- 例）?: 'user_1'
+            #       user_id = ?
+            #     AND
+            #       -- 例）?: '2019-01-01 07:30:00.000000'
+            #       punched_time != ?
+            #     AND
+            #       -- 例）?: 2019-01-01、?: 2019-01-02
+            #       ? <= punched_time AND punched_time < ?
+            #     AND
+            #       -- 入力された時間
+            #       punched_time < ?
+            #   )
+            result = db_session.query(PunchClock) \
+                .filter(PunchClock.delete_flag != "1") \
+                .filter(PunchClock.user_id == user_id) \
+                .filter(PunchClock.user_id != punched_in_time) \
+                .filter(and_(punched_in_time.date() <= PunchClock.punched_time,
+                             PunchClock.punched_time < punched_in_time.date() + timedelta(days=1))) \
+                .filter(PunchClock.punched_time < punched_in_time)
+
+            for row in result:
+                row.delete_flag = '1'
+
+            db_session.add(PunchClock(user_id=user_id,
+                                      punched_time=punched_in_time,
+                                      punch_in_flag='1'))
+            db_session.commit()
+
+        # punchテーブル
+        # 1. 画面上から取得した内容で検索して、違うレコードを抽出
+        # 2. 全部空のレコードを排除
+        # 3. まだレコードが存在してたらDB処理に
+        # 4. 出勤時間に関しては、入力された時間より小さいレコードの有効フラグを無効化し、新しいレコードをINSERT
+        # 5. 退勤時間に関しては、入力された時間より大きいレコードの有効フラグを無効化し、新しいレコードをINSERT
+
+        # user_inputテーブル
+        # 1. 画面上から取得した内容で検索して、違うレコードを抽出
+        # 2. 全部空のレコードを排除
+        # 3. UPDATE
+        for dict_ in records:
+            date_ = dict_["date"]
+            punched_in_time = dict_["punched_in_time"]
+            punched_out_time = dict_["punched_in_time"]
+            func_1(date_, punched_in_time, punched_out_time)
+
+        return []
+
 
 # テーブルがDBにない場合テーブルを作成
+
 Base.metadata.create_all(engine)

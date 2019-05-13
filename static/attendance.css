@@ -1,0 +1,18 @@
+input.time {
+  width: 64px;
+  height: 30px;
+
+}
+
+td.time {
+  width: 70px;
+  height: 40px;
+  padding: 2px;
+}
+td.date {
+  width: 90px;
+}
+
+#table {
+  width: 600px;
+}
